@@ -9,7 +9,7 @@
 
   /* estilização do menu */
   header {
-    background-color: #0a3c73;
+    background-color: rgb(33, 101, 131);
   }
 }
 
@@ -33,17 +33,17 @@ header > div > button {
   cursor: pointer;
   padding: 5px;
   border-radius: 5px;
-  background-color: #0a3c73;
+  background-color: rgb(33, 101, 131);
 }
 
 #btnMenu {
-  color: rgb(177, 177, 177);
+  color: white;
   border: none;
 }
 
 nav {
   display: block;
-  background-color: #0a3c73;
+  background-color: rgb(33, 101, 131);
   border-radius: 10px;
   padding-left: 0;
   position: relative;
@@ -53,14 +53,14 @@ nav {
 nav > ul {
   list-style-type: none;
   padding-left: 0;
-  color: rgb(177, 177, 177);
+  color: white;
 }
 
 nav > ul > li > a {
   display: block;
   padding: 10px;
   text-decoration: none;
-  color: rgb(177, 177, 177);
+  color: white;
   border-top: 2px solid rgb(177, 177, 177);
 }
 
@@ -84,13 +84,14 @@ label {
   top: 0;
   left: 0;
   z-index: 999;
-  background-color: #0a3c73;
+  background-color: rgb(33, 101, 131);
   padding-top: 60px;
 }
 
 /* quando abrir */
 #menuLateral.aberto {
   transform: translateX(0);
+  z-index: 20;
 }
 
 /* overlay fundo preto */
@@ -104,7 +105,8 @@ label {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
-  z-index: 998;
+  /* z-index: 998; */
+  z-index: 10;
 }
 
 /* overlay ativo (aparece) */
@@ -124,3 +126,8 @@ main {
 /* .label:hover {
   background-color: rgb(4, 25, 77);
 } */
+
+h1,
+p {
+  font-family: "Lora", serif;
+}
