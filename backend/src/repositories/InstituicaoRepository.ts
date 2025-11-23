@@ -1,8 +1,8 @@
-import { Timestamp } from 'firebase-admin/firestore';
 import { db, admin } from '../config/firebase.js'; 
 
-import type { Local, Instituicao } from '../dtos/Instituicao.dto.js';
-import type { InstituicaoUpdateInput } from '../dtos/InstituicaoUpdateInput.js';
+import type { Instituicao } from '../dtos/instituicao/Instituicao.dto.js';
+import type { InstituicaoUpdateInput } from '../dtos/instituicao/InstituicaoUpdateInput.js';
+import type { InstituicaoCreateInput } from '../dtos/instituicao/InstituicaoCreateInput.js';
 
 const instituicoesCollection = db.collection('instituicoes');
 
@@ -10,38 +10,56 @@ class InstituicaoRepository {
     
     /* 
     CRUD
-    TODO:   ---createInstituicao, findInstituicaoById, findAllInstituicao, updateInstituicaoById, deleteInstituicaoById---
-            createInstituicao, findLocalById, findAllLocal, updateLocalById, deleteLocalById
+    TODO:   ---createInstituicao, getInstituicaoById, getAllInstituicao, updateInstituicaoById, deleteInstituicaoById---
+            createInstituicao, getLocalById, getAllLocal, updateLocalById, deleteLocalById
     */ 
     
-    async createInstituicao(data: Omit<Instituicao, 'instituicaoId' | 'createdAt' | 'updatedAt'>): Promise<Instituicao>{
-        // adicionando nova instituicao ao banco
-        const docRef = await instituicoesCollection.add(data);
+    async createInstituicao(data: InstituicaoCreateInput): Promise<Instituicao>{
 
         // retornando instituicao criada com id e timestamp
-        const timestamp = new Date();
+        const timestamp = admin.firestore.FieldValue.serverTimestamp();
 
-        const novaInstituicao: Instituicao = {
-            instituicaoId: docRef.id,
-            ...data, 
+        const dadosParaPersistencia = {
+            configuracoes: {},
+            ...data,
             createdAt: timestamp,
             updatedAt: timestamp,
-        } as Instituicao;
+        };
 
-        return novaInstituicao;
+        // adicionando a nova instituicao ao banco
+        const docRef = await instituicoesCollection.add(dadosParaPersistencia);
+
+        // segunda requisicao para obter o timestamp
+        const updatedSnapshot = await docRef.get();
+        
+        // tratativa de erro caso o banco nao retorne a instituicao recem criada
+        if (!updatedSnapshot.exists) {
+            throw new Error("Falha ao recuperar documento após a criação.");
+        }   
+
+        const dataCompleta = updatedSnapshot.data() as Omit<Instituicao, 'instituicaoId'>;
+
+        return {
+            instituicaoId: updatedSnapshot.id,
+            ...dataCompleta
+        } as Instituicao;
     }
 
-    async findInstituicaoById(id: string): Promise<Instituicao | null> {
+    async getInstituicaoById(id: string): Promise<Instituicao | null> {
         // verificando existencia
         const docSnapshot = await instituicoesCollection.doc(id).get();
         if (!docSnapshot.exists) return null;
-
+        
         // buscando instituicao
         const data = docSnapshot.data() as Omit<Instituicao, 'instituicaoId'>;
-        return { instituicaoId: docSnapshot.id, ...data } as Instituicao;
+
+        return { 
+            instituicaoId: docSnapshot.id,
+            ...data 
+        } as Instituicao;
     }
     
-    async findAllInstituicao(): Promise<Instituicao[]> {
+    async getAllInstituicao(): Promise<Instituicao[]> {
         // verificando existencia
         const querySnapshot = await instituicoesCollection.get();
         if(querySnapshot.empty) {
@@ -90,12 +108,12 @@ class InstituicaoRepository {
         const instituicaoRef = instituicoesCollection.doc(id);
 
         // verificando existencia
-        const docSnapshot = await instituicoesCollection.doc(id).get();
+        const docSnapshot = await instituicaoRef.get();
         if (!docSnapshot.exists) return false;
 
         // executando delete da sub colecao LOCAIS
         const locaisRef = instituicaoRef.collection('LOCAIS');
-        const locaisSnapshot = await locaisRef.limit(50).get();
+        const locaisSnapshot = await locaisRef.limit(100).get();
 
         if (!locaisSnapshot.empty) {
             const batch = db.batch(); 
