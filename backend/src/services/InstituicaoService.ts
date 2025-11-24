@@ -1,7 +1,7 @@
 import InstituicaoRepository from '../repositories/InstituicaoRepository.js';
 import type { InstituicaoResponse } from "../dtos/instituicao/InstituicaoResponse.js";
 
-import CustomError from '../middlewares/customError.js';
+import CustomError from '../middlewares/CustomError.js';
 import type { InstituicaoCreateInput } from '../dtos/instituicao/InstituicaoCreateInput.js';
 import type { InstituicaoUpdateInput } from '../dtos/instituicao/InstituicaoUpdateInput.js';
 import type { Instituicao } from '../dtos/instituicao/Instituicao.dto.js';
@@ -111,3 +111,4 @@ class InstituicaoService {
         return true;
     }
 }
+export default new InstituicaoService();
