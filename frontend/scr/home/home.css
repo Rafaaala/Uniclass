@@ -9,7 +9,7 @@
 
   /* estilização do menu */
   header {
-    background-color: rgb(33, 101, 131);
+    background-color: #3553c1;
   }
 }
 
@@ -33,7 +33,7 @@ header > div > button {
   cursor: pointer;
   padding: 5px;
   border-radius: 5px;
-  background-color: rgb(33, 101, 131);
+  background-color: #3553c1;
 }
 
 #btnMenu {
@@ -43,7 +43,7 @@ header > div > button {
 
 nav {
   display: block;
-  background-color: rgb(33, 101, 131);
+  background-color: #3553c1;
   border-radius: 10px;
   padding-left: 0;
   position: relative;
@@ -84,7 +84,7 @@ label {
   top: 0;
   left: 0;
   z-index: 999;
-  background-color: rgb(33, 101, 131);
+  background-color: #3553c1;
   padding-top: 60px;
 }
 
