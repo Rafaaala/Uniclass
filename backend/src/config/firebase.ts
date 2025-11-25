@@ -1,16 +1,15 @@
-import * as admin from 'firebase-admin';
-import { applicationDefault } from 'firebase-admin/app';
-
+import { initializeApp, applicationDefault, getApps } from 'firebase-admin/app';
+import { getFirestore } from 'firebase-admin/firestore';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-if (!admin.apps.length) {
-    admin.initializeApp({
+if (getApps().length === 0) { 
+    initializeApp({
         credential: applicationDefault(),
     });
 }
 
-const db = admin.firestore();
+const db = getFirestore();
 
-export { db, admin };
+export { db };

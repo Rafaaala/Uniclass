@@ -1,8 +1,9 @@
-import { db, admin } from '../config/firebase.ts'; 
+import { db } from '../config/firebase.ts'; 
 
 import type { Instituicao } from '../dtos/instituicao/Instituicao.dto.ts';
 import type { InstituicaoUpdateInput } from '../dtos/instituicao/InstituicaoUpdateInput.ts';
 import type { InstituicaoCreateInput } from '../dtos/instituicao/InstituicaoCreateInput.ts';
+import { FieldValue } from 'firebase-admin/firestore';
 
 const instituicoesCollection = db.collection('instituicoes');
 
@@ -17,7 +18,7 @@ class InstituicaoRepository {
     async createInstituicao(data: InstituicaoCreateInput): Promise<Instituicao>{
 
         // retornando instituicao criada com id e timestamp
-        const timestamp = admin.firestore.FieldValue.serverTimestamp();
+        const timestamp = FieldValue.serverTimestamp();
 
         const dadosParaPersistencia = {
             configuracoes: {},
@@ -85,7 +86,7 @@ class InstituicaoRepository {
         if (!docSnapshot.exists) return null;
 
         // preparando dados para atualizacao
-        const timestamp = admin.firestore.FieldValue.serverTimestamp();
+        const timestamp = FieldValue.serverTimestamp();
 
         const dadosParaUpdate = {
             ...data,
