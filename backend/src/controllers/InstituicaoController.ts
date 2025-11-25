@@ -1,19 +1,10 @@
 import type { Request, Response } from "express";
-import type { InstituicaoCreateInput } from "../dtos/instituicao/InstituicaoCreateInput.js";
-import InstituicaoService from "../services/InstituicaoService.js";
-import CustomError from "../middlewares/CustomError.js";
+import type { InstituicaoCreateInput } from "../dtos/instituicao/InstituicaoCreateInput.ts";
+import InstituicaoService from "../services/InstituicaoService.ts";
+import CustomError from "../middlewares/CustomError.ts";
 import type { ParamsDictionary } from 'express-serve-static-core';
-import type { InstituicaoUpdateInput } from "../dtos/instituicao/InstituicaoUpdateInput.js";
+import type { InstituicaoUpdateInput } from "../dtos/instituicao/InstituicaoUpdateInput.ts";
 
-interface InstituicaoParams {
-    id: string;
-}
-
-interface RequestWithId extends Request {
-    params: {
-        id: string;
-    } & ParamsDictionary; // Combina com o tipo ParamsDictionary
-}
 
 class InstituicaoController {
 
@@ -34,14 +25,18 @@ class InstituicaoController {
     }
 
     // GET
-    async getById(req: RequestWithId, res: Response): Promise<void>{
+    async getById(req: Request, res: Response): Promise<void>{
         try{
-            const { id } = req.params;
+            const id = req.params.id;
 
-            const instituicao = InstituicaoService.getInstituicaoById(id);
+            if (!id) {
+                throw new CustomError("O ID da instituição é obrigatório.", 400);
+            }
+
+            const instituicao = await InstituicaoService.getInstituicaoById(id);
 
             // response http de sucesso 200 OK
-            res.status(201).json(instituicao);
+            res.status(200).json(instituicao);
         }
         catch(error){
             this.handleError(res, error);
@@ -60,21 +55,33 @@ class InstituicaoController {
         }
     }
     // PATCH
-    async update(req: RequestWithId, res: Response): Promise<void>{
+    async update(req: Request, res: Response): Promise<void>{
         try{
-            const { id } = req.params;
+            const id = req.params.id;
+
+            if (!id) {
+                throw new CustomError("O ID da instituição é obrigatório.", 400);
+            }
+
             const inputData: InstituicaoUpdateInput = req.body;
 
             const updatedInstituicao = await InstituicaoService.updateInstituicaoById(id, inputData);
+
+            // response http de sucesso 200 OK
+            res.status(200).json(updatedInstituicao);
         }
         catch(error){
             this.handleError(res, error);
         }
     }
     // DELETE
-    async delete(req: RequestWithId, res: Response): Promise<void>{
+    async delete(req: Request, res: Response): Promise<void>{
         try{
-            const { id } = req.params;
+            const id = req.params.id;
+
+            if (!id) {
+                throw new CustomError("O ID da instituição é obrigatório.", 400);
+            }
 
             await InstituicaoService.deleteInstituicaoById(id);
 

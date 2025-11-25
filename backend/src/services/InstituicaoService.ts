@@ -1,10 +1,10 @@
-import InstituicaoRepository from '../repositories/InstituicaoRepository.js';
-import type { InstituicaoResponse } from "../dtos/instituicao/InstituicaoResponse.js";
+import InstituicaoRepository from '../repositories/InstituicaoRepository.ts';
+import type { InstituicaoResponse } from "../dtos/instituicao/InstituicaoResponse.ts";
 
-import CustomError from '../middlewares/CustomError.js';
-import type { InstituicaoCreateInput } from '../dtos/instituicao/InstituicaoCreateInput.js';
-import type { InstituicaoUpdateInput } from '../dtos/instituicao/InstituicaoUpdateInput.js';
-import type { Instituicao } from '../dtos/instituicao/Instituicao.dto.js';
+import CustomError from '../middlewares/CustomError.ts';
+import type { InstituicaoCreateInput } from '../dtos/instituicao/InstituicaoCreateInput.ts';
+import type { InstituicaoUpdateInput } from '../dtos/instituicao/InstituicaoUpdateInput.ts';
+import type { Instituicao } from '../dtos/instituicao/Instituicao.dto.ts';
 
 class InstituicaoService {
 

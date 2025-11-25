@@ -1,8 +1,8 @@
-import { db, admin } from '../config/firebase.js'; 
+import { db, admin } from '../config/firebase.ts'; 
 
-import type { Instituicao } from '../dtos/instituicao/Instituicao.dto.js';
-import type { InstituicaoUpdateInput } from '../dtos/instituicao/InstituicaoUpdateInput.js';
-import type { InstituicaoCreateInput } from '../dtos/instituicao/InstituicaoCreateInput.js';
+import type { Instituicao } from '../dtos/instituicao/Instituicao.dto.ts';
+import type { InstituicaoUpdateInput } from '../dtos/instituicao/InstituicaoUpdateInput.ts';
+import type { InstituicaoCreateInput } from '../dtos/instituicao/InstituicaoCreateInput.ts';
 
 const instituicoesCollection = db.collection('instituicoes');
 

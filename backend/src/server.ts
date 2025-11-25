@@ -1,7 +1,7 @@
 import express from 'express';
-import type { Request, Response } from 'express';
 
 import dotenv from 'dotenv';
+import InstituicaoRoutes from './routes/InstituicaoRoutes.ts';
 
 dotenv.config();
 
@@ -11,11 +11,8 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-app.get('/', (req: Request, res: Response) => {
-    res.send('Servidor Express + TypeScript está funcionando!');
-});
+app.use('/instituicoes', InstituicaoRoutes);
 
-// Inicia o servidor
 app.listen(PORT, () => {
     console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
 });
