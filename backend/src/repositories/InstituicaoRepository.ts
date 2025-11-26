@@ -1,9 +1,9 @@
 import { db } from '../config/firebase.ts'; 
 
-import type { Instituicao } from '../dtos/instituicao/Instituicao.dto.ts';
-import type { InstituicaoUpdateInput } from '../dtos/instituicao/InstituicaoUpdateInput.ts';
-import type { InstituicaoCreateInput } from '../dtos/instituicao/InstituicaoCreateInput.ts';
-import { FieldValue } from 'firebase-admin/firestore';
+import type { Instituicao, Local } from '../dtos/instituicao/Instituicao.dto.ts';
+import type { InstituicaoUpdateInput, LocalUpdateInput } from '../dtos/instituicao/InstituicaoUpdateInput.ts';
+import type { InstituicaoCreateInput, LocalCreateInput } from '../dtos/instituicao/InstituicaoCreateInput.ts';
+import { FieldValue, GeoPoint } from 'firebase-admin/firestore';
 
 const instituicoesCollection = db.collection('instituicoes');
 
@@ -15,9 +15,10 @@ class InstituicaoRepository {
             createInstituicao, getLocalById, getAllLocal, updateLocalById, deleteLocalById
     */ 
     
+
+    // INSTITUICAO
     async createInstituicao(data: InstituicaoCreateInput): Promise<Instituicao>{
 
-        // retornando instituicao criada com id e timestamp
         const timestamp = FieldValue.serverTimestamp();
 
         const dadosParaPersistencia = {
@@ -48,10 +49,12 @@ class InstituicaoRepository {
         } as Instituicao;
     }
 
-    async getInstituicaoById(id: string): Promise<Instituicao | null> {
+    async getInstituicaoById(id: string): Promise<Instituicao> {
         // verificando existencia
         const docSnapshot = await instituicoesCollection.doc(id).get();
-        if (!docSnapshot.exists) return null;
+        if (!docSnapshot.exists) {
+            throw new Error("Falha ao recuperar documento após a criação.");
+        };
         
         // buscando instituicao
         const data = docSnapshot.data() as Omit<Instituicao, 'instituicaoId'>;
@@ -133,6 +136,156 @@ class InstituicaoRepository {
         return true;
     }
 
+    // LOCAL
+    async createLocal(instituicaoId: string, data: LocalCreateInput): Promise<Local> {
+        
+        // verificando existencia da instituicao
+        const instituicaoRef = instituicoesCollection.doc(instituicaoId);
+        const instituicaoSnapshot = await instituicaoRef.get();
+
+        if (!instituicaoSnapshot.exists) {
+            throw new Error(`Instituição com ID ${instituicaoId} não encontrada.`);
+        }
+
+        // preparando dados para persistencia
+        const locaisRef = instituicoesCollection.doc(instituicaoId).collection('locais');
+        const timestamp = FieldValue.serverTimestamp();
+
+        const dadosParaPersistencia = {
+            ...data,
+            createdAt: timestamp,
+            updatedAt: timestamp,
+        };
+
+        // adicionando o novo local ao banco
+        const docRef = await locaisRef.add(dadosParaPersistencia);
+
+        // segunda requisicao para obter o timestamp
+        const updatedSnapshot = await docRef.get();
+
+        // Tratamento de erro
+        if (!updatedSnapshot.exists) {
+            throw new Error("Falha ao recuperar documento do local após a criação.");
+        }   
+
+        const dataCompleta = updatedSnapshot.data() as Omit<Local, 'localId'>;
+
+        return {
+            localId: updatedSnapshot.id,
+            ...dataCompleta
+        } as Local;
+    }
+
+    async getLocalById(instituicaoId: string, localId: string): Promise<Local | null>{
+
+        // verificando existencia da instituicao
+        const instituicaoRef = instituicoesCollection.doc(instituicaoId);
+        const instituicaoSnapshot = await instituicaoRef.get();
+
+        if (!instituicaoSnapshot.exists) {
+            throw new Error(`Instituição com ID ${instituicaoId} não encontrada.`);
+        }
+
+        // verificando existencia do local
+        const localRef = await instituicoesCollection.doc(instituicaoId).collection('locais').doc(localId);
+        const docSnapshot = await localRef.get();
+
+        if (!docSnapshot.exists) return null;
+
+        // buscando local
+        const data = docSnapshot.data() as Omit<Local, 'localId'>;
+
+        return { 
+            localId: docSnapshot.id,
+            ...data 
+        } as Local
+    }
+    
+    async getAllLocal(instituicaoId: string): Promise<Local[]> {
+
+        // verificando existencia da instituicao
+        const instituicaoRef = instituicoesCollection.doc(instituicaoId);
+        const instituicaoSnapshot = await instituicaoRef.get();
+
+        if (!instituicaoSnapshot.exists) {
+            throw new Error(`Instituição com ID ${instituicaoId} não encontrada.`);
+        }
+
+        // verificando se a lista é vazia
+        const querySnapshot = await instituicoesCollection.doc(instituicaoId).collection('locais').get();
+        
+        if(querySnapshot.empty){
+            console.log("Lista vazia")
+            return [];
+        }
+
+        // buscando todos os locais da instituicao
+        const locais: Local[] = querySnapshot.docs.map(doc => {
+            const data = doc.data() as Omit<Local, 'localId'>;
+            return { localId: doc.id, ...data} as Local;
+        });
+
+        return locais;
+    }
+
+    async updataLocalById(instituicaoId: string, localId: string, data: LocalUpdateInput): Promise<Local | null>{
+
+        // verificando existencia da instituicao
+        const instituicaoRef = instituicoesCollection.doc(instituicaoId);
+        const instituicaoSnapshot = await instituicaoRef.get();
+
+        if (!instituicaoSnapshot.exists) {
+            throw new Error(`Instituição com ID ${instituicaoId} não encontrada.`);
+        }
+
+        // verificando existencia do local
+        const localRef = await instituicoesCollection.doc(instituicaoId).collection('locais').doc(localId);
+        const docSnapshot = await localRef.get(); 
+
+        if (!docSnapshot.exists) return null;
+
+        // preparando dados para atualizacao
+        const timestamp = FieldValue.serverTimestamp();
+
+        const dadosParaUpdate = {
+            ...data,
+            updatedAt: timestamp
+        };
+
+        // executando atualizacao
+        await localRef.update(dadosParaUpdate);
+
+        const updatedSnapshot = await localRef.get();
+        const updatedData = updatedSnapshot.data() as Omit<Local, 'localId'>;
+
+        return {
+            localId: updatedSnapshot.id, ...updatedData
+        } as Local;
+
+
+    }
+
+    async deleteLocalById(instituicaoId: string, localId: string): Promise<boolean>{
+
+        // verificando existencia da instituicao
+        const instituicaoRef = instituicoesCollection.doc(instituicaoId);
+        const instituicaoSnapshot = await instituicaoRef.get();
+
+        if (!instituicaoSnapshot.exists) {
+            throw new Error(`Instituição com ID ${instituicaoId} não encontrada.`);
+        }
+
+        // verificando existencia do local
+        const localRef = await instituicoesCollection.doc(instituicaoId).collection('locais').doc(localId);
+        const docSnapshot = await localRef.get();
+
+        if (!docSnapshot.exists) return false;
+
+        // executando delete
+        await localRef.delete();
+
+        return true;
+    }
 }
 
 export default new InstituicaoRepository();
