@@ -103,4 +103,31 @@ router.delete('/:instituicaoId/eventos/:eventoId', (req: Request, res: Response)
     InstituicaoController.deleteEvento(req, res);
 });
 
+// ------- SUGESTAO -----
+
+// GET /instituicoes/:instituicaoId/sugestoes -> Buscar todas as sugestões da instituição
+router.get('/:instituicaoId/sugestoes', (req: Request, res: Response) => {
+    InstituicaoController.getAllSugestoes(req, res);
+});
+
+// POST /instituicoes/:instituicaoId/sugestoes -> Criar uma nova sugestão
+router.post('/:instituicaoId/sugestoes', (req: Request, res: Response) => {
+    InstituicaoController.createSugestao(req, res);
+});
+
+// GET /instituicoes/:instituicaoId/sugestoes/:sugestaoId -> Buscar sugestão por ID
+router.get('/:instituicaoId/sugestoes/:sugestaoId', (req: Request, res: Response) => {
+    InstituicaoController.getSugestaoById(req, res);
+});
+
+// PATCH /instituicoes/:instituicaoId/sugestoes/:sugestaoId -> Atualizar campos específicos
+router.patch('/:instituicaoId/sugestoes/:sugestaoId', (req: Request, res: Response) => {
+    InstituicaoController.updateSugestao(req, res);
+});
+
+// DELETE /instituicoes/:instituicaoId/sugestoes/:sugestaoId -> Excluir uma sugestão
+router.delete('/:instituicaoId/sugestoes/:sugestaoId', (req: Request, res: Response) => {
+    InstituicaoController.deleteSugestao(req, res);
+});
+
 export default router;

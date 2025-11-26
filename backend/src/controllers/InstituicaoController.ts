@@ -2,7 +2,6 @@ import type { Request, Response } from "express";
 import type { InstituicaoCreateInput, LocalCreateInput } from "../dtos/instituicao/InstituicaoCreateInput.ts";
 import InstituicaoService from "../services/InstituicaoService.ts";
 import CustomError from "../middlewares/CustomError.ts";
-import type { ParamsDictionary } from 'express-serve-static-core';
 import type { InstituicaoUpdateInput, LocalUpdateInput } from "../dtos/instituicao/InstituicaoUpdateInput.ts";
 import UsuarioService from "../services/UsuarioService.ts";
 import type { UsuarioCreateInput } from "../dtos/usuario/UsuarioCreateInput.ts";
@@ -10,6 +9,9 @@ import type { UsuarioUpdateInput } from "../dtos/usuario/UsuarioUpdateInput.ts";
 import EventoService from "../services/EventoService.ts";
 import type { EventoUpdateInput } from "../dtos/evento/EventoUpdateInput.ts";
 import type { EventoCreateInput } from "../dtos/evento/EventoCreateInput.ts";
+import SugestaoService from "../services/SugestaoService.ts"; 
+import type { SugestaoCreateInput } from "../dtos/sugestao/SugestaoCreateInput.ts";
+import type { SugestaoUpdateInput } from "../dtos/sugestao/SugestaoUpdateInput.ts";
 
 
 class InstituicaoController {
@@ -375,6 +377,102 @@ class InstituicaoController {
             this.handleError(res, error);
         }
     }
+
+// ------ SUGESTAO ------
+
+    // POST /instituicoes/:id/sugestoes
+    async createSugestao(req: Request, res: Response): Promise<void> {
+        try {
+            const instituicaoId = req.params.instituicaoId; 
+            const inputData: SugestaoCreateInput = req.body;
+
+            if (!instituicaoId) {
+                throw new CustomError("O ID da instituição é obrigatório na URL.", 400);
+            }
+
+            const novaSugestao = await SugestaoService.createSugestao(instituicaoId, inputData);
+
+            res.status(201).json(novaSugestao);
+        } catch (error) {
+            this.handleError(res, error);
+        }
+    }
+
+    // GET /instituicoes/:id/sugestoes/:sugestaoId
+    async getSugestaoById(req: Request, res: Response): Promise<void> {
+        try {
+            const instituicaoId = req.params.instituicaoId; 
+            const sugestaoId = req.params.sugestaoId; 
+
+            if (!instituicaoId || !sugestaoId) {
+                throw new CustomError("Os IDs da instituição e da sugestão são obrigatórios.", 400);
+            }
+
+            const sugestao = await SugestaoService.getSugestaoById(instituicaoId, sugestaoId);
+
+            res.status(200).json(sugestao);
+        } catch (error) {
+            this.handleError(res, error);
+        }
+    }
+
+    // GET ALL /instituicoes/:id/sugestoes
+    async getAllSugestoes(req: Request, res: Response): Promise<void> {
+        try {
+            const instituicaoId = req.params.instituicaoId; 
+
+            if (!instituicaoId) {
+                throw new CustomError("O ID da instituição é obrigatório na URL.", 400);
+            }
+
+            const sugestoes = await SugestaoService.getAllSugestoes(instituicaoId);
+
+            res.status(200).json(sugestoes);
+        } catch (error) {
+            this.handleError(res, error);
+        }
+    }
+
+    // PATCH /instituicoes/:id/sugestoes/:sugestaoId
+    async updateSugestao(req: Request, res: Response): Promise<void> {
+        try {
+            const instituicaoId = req.params.instituicaoId; 
+            const sugestaoId = req.params.sugestaoId; 
+            const inputData: SugestaoUpdateInput = req.body;
+
+            if (!instituicaoId || !sugestaoId) {
+                throw new CustomError("Os IDs da instituição e da sugestão são obrigatórios.", 400);
+            }
+
+            const updatedSugestao = await SugestaoService.updateSugestaoById(instituicaoId, sugestaoId, inputData);
+
+            res.status(200).json(updatedSugestao);
+        } catch (error) {
+            this.handleError(res, error);
+        }
+    }
+
+    // DELETE /instituicoes/:id/sugestoes/:sugestaoId
+    async deleteSugestao(req: Request, res: Response): Promise<void> {
+        try {
+            const instituicaoId = req.params.instituicaoId;
+            const sugestaoId = req.params.sugestaoId;
+
+            if (!instituicaoId || !sugestaoId) {
+                throw new CustomError("Os IDs da instituição e da sugestão são obrigatórios.", 400);
+            }
+
+            await SugestaoService.deleteSugestaoById(instituicaoId, sugestaoId);
+
+            res.status(204).send();
+        } catch (error) {
+            this.handleError(res, error);
+        }
+    }
+
+
+
+
 
 
 
