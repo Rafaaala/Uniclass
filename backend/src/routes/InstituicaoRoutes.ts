@@ -49,4 +49,31 @@ router.delete('/:instituicaoId/locais/:localId', (req: Request, res: Response) =
     InstituicaoController.deleteLocal(req, res);
 });
 
+// ------- USUARIO -----
+
+// GET /instituicoes/:instituicaoId/usuarios -> Buscar todos os usuários da instituição
+router.get('/:instituicaoId/usuarios', (req: Request, res: Response) => {
+    InstituicaoController.getAllUsuarios(req, res);
+});
+
+// POST /instituicoes/:instituicaoId/usuarios -> Criar um novo usuário
+router.post('/:instituicaoId/usuarios', (req: Request, res: Response) => {
+    InstituicaoController.createUsuario(req, res);
+});
+
+// GET /instituicoes/:instituicaoId/usuarios/:usuarioId -> Buscar usuário por ID
+router.get('/:instituicaoId/usuarios/:usuarioId', (req: Request, res: Response) => {
+    InstituicaoController.getUsuarioById(req, res);
+});
+
+// PATCH /instituicoes/:instituicaoId/usuarios/:usuarioId -> Atualizar campos específicos
+router.patch('/:instituicaoId/usuarios/:usuarioId', (req: Request, res: Response) => {
+    InstituicaoController.updateUsuario(req, res);
+});
+
+// DELETE /instituicoes/:instituicaoId/usuarios/:usuarioId -> Excluir um usuário
+router.delete('/:instituicaoId/usuarios/:usuarioId', (req: Request, res: Response) => {
+    InstituicaoController.deleteUsuario(req, res);
+});
+
 export default router;

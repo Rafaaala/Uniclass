@@ -4,6 +4,9 @@ import InstituicaoService from "../services/InstituicaoService.ts";
 import CustomError from "../middlewares/CustomError.ts";
 import type { ParamsDictionary } from 'express-serve-static-core';
 import type { InstituicaoUpdateInput, LocalUpdateInput } from "../dtos/instituicao/InstituicaoUpdateInput.ts";
+import UsuarioService from "../services/UsuarioService.ts";
+import type { UsuarioCreateInput } from "../dtos/usuario/UsuarioCreateInput.ts";
+import type { UsuarioUpdateInput } from "../dtos/usuario/UsuarioUpdateInput.ts";
 
 
 class InstituicaoController {
@@ -191,6 +194,93 @@ class InstituicaoController {
         }
     }
 
+    // ------ USUARIO ------
+
+    async createUsuario(req: Request, res: Response): Promise<void> {
+        try {
+            const instituicaoId = req.params.instituicaoId;
+            const inputData: UsuarioCreateInput = req.body;
+
+            if (!instituicaoId) {
+                throw new CustomError("O ID da instituição é obrigatório na URL.", 400);
+            }
+
+            const novoUsuario = await UsuarioService.createUsuario(instituicaoId, inputData);
+
+            res.status(201).json(novoUsuario);
+        } catch (error) {
+            this.handleError(res, error);
+        }
+    }
+
+    async getUsuarioById(req: Request, res: Response): Promise<void> {
+        try {
+            const instituicaoId = req.params.instituicaoId; 
+            const usuarioId = req.params.usuarioId; 
+
+            if (!instituicaoId || !usuarioId) {
+                throw new CustomError("Os IDs da instituição e do usuário são obrigatórios.", 400);
+            }
+
+            const usuario = await UsuarioService.getUsuarioById(instituicaoId, usuarioId);
+
+            res.status(200).json(usuario);
+        } catch (error) {
+            this.handleError(res, error);
+        }
+    }
+
+    async getAllUsuarios(req: Request, res: Response): Promise<void> {
+        try {
+            const instituicaoId = req.params.instituicaoId; 
+
+            if (!instituicaoId) {
+                throw new CustomError("O ID da instituição é obrigatório na URL.", 400);
+            }
+
+            const usuarios = await UsuarioService.getAllUsuarios(instituicaoId);
+
+            res.status(200).json(usuarios);
+        } catch (error) {
+            this.handleError(res, error);
+        }
+    }
+
+    async updateUsuario(req: Request, res: Response): Promise<void> {
+        try {
+            const instituicaoId = req.params.instituicaoId; 
+            const usuarioId = req.params.usuarioId; 
+            const inputData: UsuarioUpdateInput = req.body;
+
+            if (!instituicaoId || !usuarioId) {
+                throw new CustomError("Os IDs da instituição e do usuário são obrigatórios.", 400);
+            }
+
+            const updatedUsuario = await UsuarioService.updateUsuarioById(instituicaoId, usuarioId, inputData);
+
+            res.status(200).json(updatedUsuario);
+        } catch (error) {
+            this.handleError(res, error);
+        }
+    }
+
+    async deleteUsuario(req: Request, res: Response): Promise<void> {
+        try {
+            const instituicaoId = req.params.instituicaoId;
+            const usuarioId = req.params.usuarioId;
+
+            if (!instituicaoId || !usuarioId) {
+                throw new CustomError("Os IDs da instituição e do usuário são obrigatórios.", 400);
+            }
+
+            await UsuarioService.deleteUsuarioById(instituicaoId, usuarioId);
+
+            res.status(204).send();
+        } catch (error) {
+            this.handleError(res, error);
+        }
+    }
+
     // tratamento de erro
     private handleError(res: Response, error: unknown): void {
         if (error instanceof CustomError) {
@@ -209,5 +299,6 @@ class InstituicaoController {
         }
     }
 }
+
 
 export default new InstituicaoController();

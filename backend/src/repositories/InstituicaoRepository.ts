@@ -3,7 +3,7 @@ import { db } from '../config/firebase.ts';
 import type { Instituicao, Local } from '../dtos/instituicao/Instituicao.dto.ts';
 import type { InstituicaoUpdateInput, LocalUpdateInput } from '../dtos/instituicao/InstituicaoUpdateInput.ts';
 import type { InstituicaoCreateInput, LocalCreateInput } from '../dtos/instituicao/InstituicaoCreateInput.ts';
-import { FieldValue, GeoPoint } from 'firebase-admin/firestore';
+import { FieldValue } from 'firebase-admin/firestore';
 
 const instituicoesCollection = db.collection('instituicoes');
 
