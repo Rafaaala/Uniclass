@@ -60,15 +60,16 @@ class InstituicaoService {
         if(instituicoes.length === 0){
             throw new CustomError("Nenhuma instituicao cadastrada para ser listada.", 404)
         }
-
+        
         // mapeando o array do repositorio para o array de response
         const response: InstituicaoResponse[] = instituicoes.map(doc => ({
             instituicaoId: doc.instituicaoId,
             nome: doc.nome,
             logoUrl: doc.logoUrl,
             mapaUrl: doc.mapaUrl,
+            configuracoes: doc.configuracoes
         }));
-
+        
         return response;
     }
     

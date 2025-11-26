@@ -21,7 +21,9 @@ class InstituicaoRepository {
         const timestamp = FieldValue.serverTimestamp();
 
         const dadosParaPersistencia = {
-            configuracoes: {},
+            configuracoes: {
+                "teste": 1
+            },
             ...data,
             createdAt: timestamp,
             updatedAt: timestamp,
@@ -61,9 +63,10 @@ class InstituicaoRepository {
     }
     
     async getAllInstituicao(): Promise<Instituicao[]> {
-        // verificando existencia
+        // verificando se a lista é vazia
         const querySnapshot = await instituicoesCollection.get();
         if(querySnapshot.empty) {
+            console.log("Lista vazia")
             return [];
         }
 

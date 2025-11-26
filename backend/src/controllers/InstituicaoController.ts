@@ -45,7 +45,7 @@ class InstituicaoController {
     // GET
     async getAll(req: Request, res: Response): Promise<void>{
         try{
-            const instituicoes = InstituicaoService.getAllInstituicao();
+            const instituicoes = await InstituicaoService.getAllInstituicao();
 
             // response http de sucesso 200 OK mesmo com array vazio([])
             res.status(200).json(instituicoes);
