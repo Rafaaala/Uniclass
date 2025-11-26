@@ -7,6 +7,9 @@ import type { InstituicaoUpdateInput, LocalUpdateInput } from "../dtos/instituic
 import UsuarioService from "../services/UsuarioService.ts";
 import type { UsuarioCreateInput } from "../dtos/usuario/UsuarioCreateInput.ts";
 import type { UsuarioUpdateInput } from "../dtos/usuario/UsuarioUpdateInput.ts";
+import EventoService from "../services/EventoService.ts";
+import type { EventoUpdateInput } from "../dtos/evento/EventoUpdateInput.ts";
+import type { EventoCreateInput } from "../dtos/evento/EventoCreateInput.ts";
 
 
 class InstituicaoController {
@@ -280,6 +283,100 @@ class InstituicaoController {
             this.handleError(res, error);
         }
     }
+
+    // ------ EVENTO ------
+
+    // POST /instituicoes/:id/eventos
+    async createEvento(req: Request, res: Response): Promise<void> {
+        try {
+            const instituicaoId = req.params.instituicaoId; // Captura o ID da Instituição da URL
+            const inputData: EventoCreateInput = req.body;
+
+            if (!instituicaoId) {
+                throw new CustomError("O ID da instituição é obrigatório na URL.", 400);
+            }
+
+            const novoEvento = await EventoService.createEvento(instituicaoId, inputData);
+
+            res.status(201).json(novoEvento);
+        } catch (error) {
+            this.handleError(res, error);
+        }
+    }
+
+    // GET /instituicoes/:id/eventos/:eventoId
+    async getEventoById(req: Request, res: Response): Promise<void> {
+        try {
+            const instituicaoId = req.params.instituicaoId; 
+            const eventoId = req.params.eventoId; 
+
+            if (!instituicaoId || !eventoId) {
+                throw new CustomError("Os IDs da instituição e do evento são obrigatórios.", 400);
+            }
+
+            const evento = await EventoService.getEventoById(instituicaoId, eventoId);
+
+            res.status(200).json(evento);
+        } catch (error) {
+            this.handleError(res, error);
+        }
+    }
+
+    // GET ALL /instituicoes/:id/eventos
+    async getAllEventos(req: Request, res: Response): Promise<void> {
+        try {
+            const instituicaoId = req.params.instituicaoId; 
+
+            if (!instituicaoId) {
+                throw new CustomError("O ID da instituição é obrigatório na URL.", 400);
+            }
+
+            const eventos = await EventoService.getAllEventos(instituicaoId);
+
+            res.status(200).json(eventos);
+        } catch (error) {
+            this.handleError(res, error);
+        }
+    }
+
+    // PATCH /instituicoes/:id/eventos/:eventoId
+    async updateEvento(req: Request, res: Response): Promise<void> {
+        try {
+            const instituicaoId = req.params.instituicaoId; 
+            const eventoId = req.params.eventoId; 
+            const inputData: EventoUpdateInput = req.body;
+
+            if (!instituicaoId || !eventoId) {
+                throw new CustomError("Os IDs da instituição e do evento são obrigatórios.", 400);
+            }
+
+            const updatedEvento = await EventoService.updateEventoById(instituicaoId, eventoId, inputData);
+
+            res.status(200).json(updatedEvento);
+        } catch (error) {
+            this.handleError(res, error);
+        }
+    }
+
+    // DELETE /instituicoes/:id/eventos/:eventoId
+    async deleteEvento(req: Request, res: Response): Promise<void> {
+        try {
+            const instituicaoId = req.params.instituicaoId;
+            const eventoId = req.params.eventoId;
+
+            if (!instituicaoId || !eventoId) {
+                throw new CustomError("Os IDs da instituição e do evento são obrigatórios.", 400);
+            }
+
+            await EventoService.deleteEventoById(instituicaoId, eventoId);
+
+            res.status(204).send();
+        } catch (error) {
+            this.handleError(res, error);
+        }
+    }
+
+
 
     // tratamento de erro
     private handleError(res: Response, error: unknown): void {

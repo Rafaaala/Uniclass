@@ -76,4 +76,31 @@ router.delete('/:instituicaoId/usuarios/:usuarioId', (req: Request, res: Respons
     InstituicaoController.deleteUsuario(req, res);
 });
 
+// ------- EVENTO -----
+
+// GET /instituicoes/:instituicaoId/eventos -> Buscar todos os eventos da instituição
+router.get('/:instituicaoId/eventos', (req: Request, res: Response) => {
+    InstituicaoController.getAllEventos(req, res);
+});
+
+// POST /instituicoes/:instituicaoId/eventos -> Criar um novo evento
+router.post('/:instituicaoId/eventos', (req: Request, res: Response) => {
+    InstituicaoController.createEvento(req, res);
+});
+
+// GET /instituicoes/:instituicaoId/eventos/:eventoId -> Buscar evento por ID
+router.get('/:instituicaoId/eventos/:eventoId', (req: Request, res: Response) => {
+    InstituicaoController.getEventoById(req, res);
+});
+
+// PATCH /instituicoes/:instituicaoId/eventos/:eventoId -> Atualizar campos específicos
+router.patch('/:instituicaoId/eventos/:eventoId', (req: Request, res: Response) => {
+    InstituicaoController.updateEvento(req, res);
+});
+
+// DELETE /instituicoes/:instituicaoId/eventos/:eventoId -> Excluir um evento
+router.delete('/:instituicaoId/eventos/:eventoId', (req: Request, res: Response) => {
+    InstituicaoController.deleteEvento(req, res);
+});
+
 export default router;
