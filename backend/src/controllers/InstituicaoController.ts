@@ -12,6 +12,9 @@ import type { EventoCreateInput } from "../dtos/evento/EventoCreateInput.ts";
 import SugestaoService from "../services/SugestaoService.ts"; 
 import type { SugestaoCreateInput } from "../dtos/sugestao/SugestaoCreateInput.ts";
 import type { SugestaoUpdateInput } from "../dtos/sugestao/SugestaoUpdateInput.ts";
+import AvisoService from "../services/AvisoService.ts";
+import type { AvisoUpdateInput } from "../dtos/aviso/AvisoUpdateInput.ts";
+import type { AvisoCreateInput } from "../dtos/aviso/AvisoCreateInput.ts";
 
 
 class InstituicaoController {
@@ -470,7 +473,97 @@ class InstituicaoController {
         }
     }
 
+    // ------ AVISO ------
 
+    // POST /instituicoes/:id/avisos
+    async createAviso(req: Request, res: Response): Promise<void> {
+        try {
+            const instituicaoId = req.params.instituicaoId;
+            const inputData: AvisoCreateInput = req.body;
+
+            if (!instituicaoId) {
+                throw new CustomError("O ID da instituição é obrigatório na URL.", 400);
+            }
+
+            const novoAviso = await AvisoService.createAviso(instituicaoId, inputData);
+
+            res.status(201).json(novoAviso);
+        } catch (error) {
+            this.handleError(res, error);
+        }
+    }
+
+    // GET /instituicoes/:id/avisos/:avisoId
+    async getAvisoById(req: Request, res: Response): Promise<void> {
+        try {
+            const instituicaoId = req.params.instituicaoId; 
+            const avisoId = req.params.avisoId; 
+
+            if (!instituicaoId || !avisoId) {
+                throw new CustomError("Os IDs da instituição e do aviso são obrigatórios.", 400);
+            }
+
+            const aviso = await AvisoService.getAvisoById(instituicaoId, avisoId);
+
+            res.status(200).json(aviso);
+        } catch (error) {
+            this.handleError(res, error);
+        }
+    }
+
+    // GET ALL /instituicoes/:id/avisos
+    async getAllAvisos(req: Request, res: Response): Promise<void> {
+        try {
+            const instituicaoId = req.params.instituicaoId; 
+
+            if (!instituicaoId) {
+                throw new CustomError("O ID da instituição é obrigatório na URL.", 400);
+            }
+
+            const avisos = await AvisoService.getAllAvisos(instituicaoId);
+
+            res.status(200).json(avisos);
+        } catch (error) {
+            this.handleError(res, error);
+        }
+    }
+
+    // PATCH /instituicoes/:id/avisos/:avisoId
+    async updateAviso(req: Request, res: Response): Promise<void> {
+        try {
+            const instituicaoId = req.params.instituicaoId; 
+            const avisoId = req.params.avisoId; 
+            const inputData: AvisoUpdateInput = req.body;
+
+            if (!instituicaoId || !avisoId) {
+                throw new CustomError("Os IDs da instituição e do aviso são obrigatórios.", 400);
+            }
+
+            const updatedAviso = await AvisoService.updateAvisoById(instituicaoId, avisoId, inputData);
+
+            res.status(200).json(updatedAviso);
+        } catch (error) {
+            this.handleError(res, error);
+        }
+    }
+
+    // DELETE /instituicoes/:id/avisos/:avisoId
+    async deleteAviso(req: Request, res: Response): Promise<void> {
+        try {
+            const instituicaoId = req.params.instituicaoId;
+            const avisoId = req.params.avisoId;
+
+            if (!instituicaoId || !avisoId) {
+                throw new CustomError("Os IDs da instituição e do aviso são obrigatórios.", 400);
+            }
+
+            await AvisoService.deleteAvisoById(instituicaoId, avisoId);
+
+            res.status(204).send();
+        } catch (error) {
+            this.handleError(res, error);
+        }
+    }
 
 
 

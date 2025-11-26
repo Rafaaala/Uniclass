@@ -1,6 +1,6 @@
 import { db } from '../config/firebase.ts'; 
 import { FieldValue } from 'firebase-admin/firestore';
-import type { Usuario } from '../dtos/usuario/usuario.dto.ts';
+import type { Usuario } from '../dtos/usuario/Usuario.dto.ts';
 import type { UsuarioCreateInput } from '../dtos/usuario/UsuarioCreateInput.ts';
 import type { UsuarioUpdateInput } from '../dtos/usuario/UsuarioUpdateInput.ts';
 
@@ -49,7 +49,6 @@ class UsuarioRepository {
     
     // GET ALL: Busca todos os usuários de uma INSTITUIÇÃO específica
     async getAllUsuariosByInstituicao(instituicaoId: string): Promise<Usuario[]> {
-        // Usa a referência (instituicaoId) para filtrar os documentos no nível raiz.
         const querySnapshot = await usuariosCollection
             .where('instituicaoId', '==', instituicaoId)
             .get();
@@ -60,11 +59,15 @@ class UsuarioRepository {
         }
 
         const usuarios: Usuario[] = querySnapshot.docs.map(doc => {
-            const data = doc.data() as Omit<Usuario, 'usuarioId'>;
-            return { usuarioId: doc.id, ...data} as Usuario;
-        });
+        const dataDoDoc = doc.data() as Omit<Usuario, 'usuarioId'>; 
+        
+        return { 
+            usuarioId: doc.id,
+            ...dataDoDoc
+        } as Usuario;
+    });
 
-        return usuarios;
+    return usuarios;
     }
 
     // PATCH: Atualiza campos específicos de um usuário

@@ -1,7 +1,7 @@
 import UsuarioRepository from '../repositories/UsuarioRepository.ts';
 import InstituicaoRepository from '../repositories/InstituicaoRepository.ts'; // Para validação da Instituição
 import CustomError from '../middlewares/CustomError.ts';
-import type { Usuario } from '../dtos/usuario/usuario.dto.ts';
+import type { Usuario } from '../dtos/usuario/Usuario.dto.ts';
 import type { UsuarioCreateInput } from '../dtos/usuario/UsuarioCreateInput.ts';
 import type { UsuarioUpdateInput } from '../dtos/usuario/UsuarioUpdateInput.ts';
 import type { UsuarioResponse } from '../dtos/usuario/UsuarioResponse.ts';

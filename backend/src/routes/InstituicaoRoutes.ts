@@ -130,4 +130,31 @@ router.delete('/:instituicaoId/sugestoes/:sugestaoId', (req: Request, res: Respo
     InstituicaoController.deleteSugestao(req, res);
 });
 
+// ------- AVISO -----
+
+// GET /instituicoes/:instituicaoId/avisos -> Buscar todos os avisos da instituição
+router.get('/:instituicaoId/avisos', (req: Request, res: Response) => {
+    InstituicaoController.getAllAvisos(req, res);
+});
+
+// POST /instituicoes/:instituicaoId/avisos -> Criar um novo aviso
+router.post('/:instituicaoId/avisos', (req: Request, res: Response) => {
+    InstituicaoController.createAviso(req, res);
+});
+
+// GET /instituicoes/:instituicaoId/avisos/:avisoId -> Buscar aviso por ID
+router.get('/:instituicaoId/avisos/:avisoId', (req: Request, res: Response) => {
+    InstituicaoController.getAvisoById(req, res);
+});
+
+// PATCH /instituicoes/:instituicaoId/avisos/:avisoId -> Atualizar campos específicos
+router.patch('/:instituicaoId/avisos/:avisoId', (req: Request, res: Response) => {
+    InstituicaoController.updateAviso(req, res);
+});
+
+// DELETE /instituicoes/:instituicaoId/avisos/:avisoId -> Excluir um aviso
+router.delete('/:instituicaoId/avisos/:avisoId', (req: Request, res: Response) => {
+    InstituicaoController.deleteAviso(req, res);
+});
+
 export default router;
