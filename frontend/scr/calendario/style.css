@@ -197,7 +197,7 @@ body {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: red;
+  background: yellow;
 }
 
 .calendar-footer {
@@ -283,7 +283,7 @@ body {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: red;
+  background: yellow;
   flex-shrink: 0;
 }
 

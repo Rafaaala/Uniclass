@@ -4,56 +4,40 @@ document.addEventListener("DOMContentLoaded", function () {
   const prevMonthBtn = document.getElementById("prev-month");
   const nextMonthBtn = document.getElementById("next-month");
   const todayBtn = document.getElementById("today-btn");
-  const eventPanel = document.getElementById("event-panel");
   const eventDateEl = document.getElementById("event-date");
   const eventListEl = document.getElementById("event-list");
 
   let currentDate = new Date();
   let selectedDate = null;
 
-  // Sample events data
+  // ====== PADRONIZAÇÃO DE DATA ======
+  function pad(n) {
+    return n < 10 ? "0" + n : n;
+  }
+
+  function buildDateKey(y, m, d) {
+    return `${y}-${pad(m)}-${pad(d)}`;
+  }
+
+  // ====== EVENTOS DE EXEMPLO ======
   const events = {
-    "2025-9-15": [
-      { time: "10:00 AM", text: "Team meeting" },
-      { time: "02:30 PM", text: "Project review" },
-    ],
-    "2025-9-20": [{ time: "11:00 AM", text: "Doctor appointment" }],
-    "2025-9-25": [
-      { time: "07:00 PM", text: "Birthday party" },
-      { time: "09:00 PM", text: "Dinner with friends" },
-    ],
-    "2025-10-2": [{ time: "03:00 PM", text: "Conference call" }],
-    "2025-10-10": [{ time: "All day", text: "Project deadline" }],
-    "2025-10-18": [
-      { time: "12:00 PM", text: "Lunch with client" },
-      { time: "04:00 PM", text: "Product demo" },
-    ],
-    "2025-10-31 / 2025-11-5": [{ time: "All day", text: "Provas" }],
+    "2025-10-06": [{ time: "15:00 PM", text: "Acolhimento de alunos" }],
+    "2025-10-17": [{ time: "All day", text: "Evento Clinica-Escola" }],
+    "2025-10-18": [{ time: "08:00 PM", text: "MOCHILÃO - Unipê" }],
   };
 
-  // Render calendar
+  // ====== RENDERIZA O CALENDÁRIO ======
   function renderCalendar() {
-    const firstDay = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth(),
-      1
-    );
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth(); // 0–11
 
-    const lastDay = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth() + 1,
-      0
-    );
-
-    const prevLastDay = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth(),
-      0
-    );
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const prevLastDay = new Date(year, month, 0);
 
     const firstDayIndex = firstDay.getDay();
     const lastDayIndex = lastDay.getDay();
-    const nextDays = 7 - lastDayIndex - 1;
+    const nextDays = 7 - (lastDayIndex + 1);
 
     const months = [
       "Janeiro",
@@ -70,92 +54,90 @@ document.addEventListener("DOMContentLoaded", function () {
       "Dezembro",
     ];
 
-    monthYearEl.innerHTML = `${
-      months[currentDate.getMonth()]
-    } ${currentDate.getFullYear()}`;
-
+    monthYearEl.textContent = `${months[month]} ${year}`;
     let days = "";
 
-    // Previous month days
+    // ====== Dias do mês anterior ======
     for (let x = firstDayIndex; x > 0; x--) {
-      const prevDate = prevLastDay.getDate() - x + 1;
-      const dateKey = `${currentDate.getFullYear()}-${currentDate.getMonth()}-${prevDate}`;
-      const hasEvent = events[dateKey] !== undefined;
+      const day = prevLastDay.getDate() - x + 1;
+      const dateKey = buildDateKey(year, month, day);
 
-      days += `<div class="day other-month${
-        hasEvent ? " has-events" : ""
-      }">${prevDate}</div>`;
+      const hasEvent = !!events[dateKey];
+
+      days += `
+        <div class="day other-month${hasEvent ? " has-events" : ""}">
+          ${day}
+        </div>
+      `;
     }
 
-    // Current month days
-    for (let i = 1; i <= lastDay.getDate(); i++) {
-      const date = new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth(),
-        i
-      );
+    // ====== Dias do mês atual ======
+    for (let day = 1; day <= lastDay.getDate(); day++) {
+      const dateKey = buildDateKey(year, month + 1, day);
+      const hasEvent = !!events[dateKey];
 
-      const dateKey = `${currentDate.getFullYear()}-${
-        currentDate.getMonth() + 1
-      }-${i}`;
-      const hasEvent = events[dateKey] !== undefined;
+      let classes = "day";
 
-      let dayClass = "day";
-
+      const today = new Date();
       if (
-        date.getDate() === new Date().getDate() &&
-        date.getMonth() === new Date().getMonth() &&
-        date.getFullYear() === new Date().getFullYear()
+        day === today.getDate() &&
+        month === today.getMonth() &&
+        year === today.getFullYear()
       ) {
-        dayClass += " today";
+        classes += " today";
       }
 
       if (
         selectedDate &&
-        date.getDate() === selectedDate.getDate() &&
-        date.getMonth() === selectedDate.getMonth() &&
-        date.getFullYear() === selectedDate.getFullYear()
+        day === selectedDate.getDate() &&
+        month === selectedDate.getMonth() &&
+        year === selectedDate.getFullYear()
       ) {
-        dayClass += " selected";
+        classes += " selected";
       }
 
-      if (hasEvent) {
-        dayClass += " has-events";
-      }
+      if (hasEvent) classes += " has-events";
 
-      days += `<div class="${dayClass}" data-date="${dateKey}">${i}</div>`;
+      days += `
+        <div class="${classes}" data-date="${dateKey}">
+          ${day}
+        </div>
+      `;
     }
 
-    // Next month days
-    for (let j = 1; j <= nextDays; j++) {
-      const dateKey = `${currentDate.getFullYear()}-${
-        currentDate.getMonth() + 2
-      }-${j}`;
-      const hasEvent = events[dateKey] !== undefined;
+    // ====== Dias do próximo mês ======
+    for (let day = 1; day <= nextDays; day++) {
+      const dateKey = buildDateKey(year, month + 2, day);
+      const hasEvent = !!events[dateKey];
 
-      days += `<div class="day other-month${
-        hasEvent ? " has-events" : ""
-      }">${j}</div>`;
+      days += `
+        <div class="day other-month${hasEvent ? " has-events" : ""}">
+          ${day}
+        </div>
+      `;
     }
 
     daysEl.innerHTML = days;
 
-    // Add click event to days
-    document.querySelectorAll(".day:not(.other-month)").forEach((day) => {
-      day.addEventListener("click", () => {
-        const dateStr = day.getAttribute("data-date");
-        const [year, month, dayNum] = dateStr.split("-").map(Number);
-        selectedDate = new Date(year, month - 1, dayNum);
+    // ====== Clique nos dias ======
+    document.querySelectorAll(".day:not(.other-month)").forEach((dayEl) => {
+      dayEl.addEventListener("click", () => {
+        const dateStr = dayEl.getAttribute("data-date");
+        const [y, m, d] = dateStr.split("-").map(Number);
+
+        selectedDate = new Date(y, m - 1, d);
+
         renderCalendar();
         showEvents(dateStr);
       });
     });
   }
 
-  // Show events for selected date
+  // ====== MOSTRA EVENTOS ======
   function showEvents(dateStr) {
     const [year, month, day] = dateStr.split("-").map(Number);
     const dateObj = new Date(year, month - 1, day);
+
     const months = [
       "Janeiro",
       "Fevereiro",
@@ -171,71 +153,72 @@ document.addEventListener("DOMContentLoaded", function () {
       "Dezembro",
     ];
 
-    const dayNames = [
+    const weekDays = [
+      "Domingo",
       "Segunda",
       "Terça",
       "Quarta",
       "Quinta",
       "Sexta",
       "Sábado",
-      "Domingo",
     ];
-    const dayName = dayNames[dateObj.getDay()];
 
-    eventDateEl.textContent = `${dayName}, ${
-      months[dateObj.getMonth()]
-    } ${day}, ${year}`;
+    const weekDayName = weekDays[dateObj.getDay()];
 
-    // Clear previous events
+    eventDateEl.textContent = `${weekDayName}, ${day} de ${
+      months[month - 1]
+    } de ${year}`;
     eventListEl.innerHTML = "";
 
     if (events[dateStr]) {
-      events[dateStr].forEach((event) => {
-        const eventItem = document.createElement("div");
-        eventItem.className = "event-item";
-        eventItem.innerHTML = `
+      events[dateStr].forEach((evt) => {
+        const item = document.createElement("div");
+        item.className = "event-item";
+        item.innerHTML = `
           <div class="event-color"></div>
-          <div class="event-time">${event.time}</div>
-          <div class="event-text">${event.text}</div>
+          <div class="event-time">${evt.time}</div>
+          <div class="event-text">${evt.text}</div>
         `;
-        eventListEl.appendChild(eventItem);
+        eventListEl.appendChild(item);
       });
     } else {
-      eventListEl.innerHTML =
-        '<div class="no-events">Sem eventos para esse dia</div>';
+      eventListEl.innerHTML = `<div class="no-events">Sem eventos para esse dia</div>`;
     }
   }
 
-  // Previous month
+  // ====== Botão mês anterior ======
   prevMonthBtn.addEventListener("click", () => {
     currentDate.setMonth(currentDate.getMonth() - 1);
+    selectedDate = null;
     renderCalendar();
-    eventDateEl.textContent = "Select a date";
-    eventListEl.innerHTML =
-      '<div class="no-events">Selecione uma data para visualizar os eventos aqui</div>';
+    eventDateEl.textContent = "Selecione uma data";
+    eventListEl.innerHTML = "";
   });
 
-  // Next month
+  // ====== Botão próximo mês ======
   nextMonthBtn.addEventListener("click", () => {
     currentDate.setMonth(currentDate.getMonth() + 1);
+    selectedDate = null;
     renderCalendar();
-    eventDateEl.textContent = "Select a date";
-    eventListEl.innerHTML =
-      '<div class="no-events">Selecione uma data com eventos para vizualizá-los aqui</div>';
+    eventDateEl.textContent = "Selecione uma data";
+    eventListEl.innerHTML = "";
   });
 
-  // Today button
+  // ====== Botão HOJE ======
   todayBtn.addEventListener("click", () => {
     currentDate = new Date();
     selectedDate = new Date();
     renderCalendar();
 
-    const dateStr = `${currentDate.getFullYear()}-${
-      currentDate.getMonth() + 1
-    }-${currentDate.getDate()}`;
-    showEvents(dateStr);
+    const todayKey = buildDateKey(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
+      currentDate.getDate()
+    );
+
+    showEvents(todayKey);
   });
 
-  // Initialize calendar
+  // Inicializa
   renderCalendar();
 });

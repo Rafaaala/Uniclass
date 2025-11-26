@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br ">
+<html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -243,17 +243,25 @@
           <div class="event-indicator">
             <i
               class="fas fa-circle"
-              style="color: var(--accent); font-size: 0.6rem"
+              style="color: yellow; font-size: 0.6rem"
             ></i>
             <span>Eventos</span>
           </div>
         </div>
       </div>
 
-      <!-- Event Panel -->
-      <div class="event-panel" id="event-panel">
-        <div class="event-header">
-          <div class="event-date" id="event-date">Selecione uma data</div>
+      <!-- Painel de Eventos -->
+<div class="event-panel" id="event-panel">
+  <div class="event-header">
+    <div class="event-date" id="event-date">Selecione uma data</div>
+  </div>
+
+  <!-- ESTA DIV É ESSENCIAL! -->
+  <div class="event-list" id="event-list">
+      <!-- Eventos vão aparecer aqui -->
+  </div>
+</div>
+
     <script src="script.js"></script>
   </body>
 </html>
