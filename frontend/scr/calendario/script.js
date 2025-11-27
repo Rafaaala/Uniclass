@@ -22,8 +22,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // ====== EVENTOS DE EXEMPLO ======
   const events = {
     "2025-10-06": [{ time: "15:00 PM", text: "Acolhimento de alunos" }],
-    "2025-10-17": [{ time: "All day", text: "Evento Clinica-Escola" }],
-    "2025-10-18": [{ time: "08:00 PM", text: "MOCHILÃO - Unipê" }],
+    "2025-10-17": [{ time: "Dia todo", text: "Evento Clinica-Escola" }],
+    "2025-10-18": [{ time: "08:00 AM", text: "MOCHILÃO - Unipê" }],
   };
 
   // ====== RENDERIZA O CALENDÁRIO ======

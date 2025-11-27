@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mapa UNIPÊ — Navegação Pedestre</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header id="map-header">
+      <!--HTML MENU PADRÃO-->
+      <div>
+        <h1>Uniclass</h1>
+        <button id="btnMenu">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+      </div>
+      <nav id="menuLateral">
+        <ul>
+          <li>
+            <a href="#"
+              ><span class="material-symbols-outlined">person_edit</span></a
+            >
+          </li>
+          <label for="">Perfil</label>
+
+          <li>
+            <a href="../home/home.html"
+              ><span class="material-symbols-outlined"> home</span></a
+            >
+          </li>
+          <label>Home</label>
+
+          <li>
+            <a href="#"
+              ><span class="material-symbols-outlined">lightbulb</span></a
+            >
+          </li>
+          <label for="">Sugestão</label>
+          <li>
+            <a href="../calendario/index.html"
+              ><span class="material-symbols-outlined">calendar_month</span></a
+            >
+          </li>
+          <label for="">Calendário</label>
+          <li>
+            <a href="../maps/unipe_mapa.html"
+              ><span class="material-symbols-outlined">map_search</span></a
+            >
+          </li>
+          <label for="">Maps</label>
+          <li>
+            <a href="#"
+              ><span class="material-symbols-outlined">maps_ugc</span></a
+            >
+          </li>
+          <label for="">Comunidade e Eventos</label>
+
+          <li>
+            <a href="#"
+              ><span class="material-symbols-outlined">logout</span></a
+            >
+          </li>
+          <label for="">Sair</label>
+        </ul>
+      </nav>
+    </header>
+    <div class="overlay"></div>
+
+    <!--Script MENU PADRÃO-->
+    <script>
+      const btnMenu = document.getElementById("btnMenu");
+      const menuLateral = document.getElementById("menuLateral");
+      const overlay = document.querySelector(".overlay");
+
+      btnMenu.addEventListener("click", () => {
+        menuLateral.classList.toggle("aberto");
+        overlay.classList.toggle("ativo");
+      });
+
+      overlay.addEventListener("click", () => {
+        menuLateral.classList.remove("aberto");
+        overlay.classList.remove("ativo");
+      });
+    </script>
+
+    <div id="aviso-fora">
+      Você está fora do campus — navegação disponível somente dentro da área.
+    </div>
+    <div id="map"></div>
+    <div id="info-bottom">
+      Clique em qualquer bloco e pressione <strong>IR</strong> para iniciar
+      navegação.
+    </div>
+    <button id="btn-sair-navegacao" onclick="sairDaNavegacao()">
+      🚪 Sair da Navegação
+    </button>
+    <button
+      id="btn-toggle-voz"
+      onclick="toggleVoz()"
+      title="Ativar/Desativar voz"
+    >
+      🔊
+    </button>
+
+    <button id="btn-voice-cmd" title="Comandos de voz">🎤</button>
+
+    <button id="btn-auto-reload" title="Auto-recarregar rota">
+      Auto-reload
+    </button>
+
+    <button id="btn-proxima" onclick="anunciarProximaInstrucao()">
+      Próxima
+    </button>
+    <button id="btn-anterior" onclick="anunciarInstrucaoAnterior()">
+      Anterior
+    </button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+
+    <script src="mapa.js"></script>
+  </body>
+</html>

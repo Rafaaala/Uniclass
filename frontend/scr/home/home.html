@@ -8,7 +8,6 @@
       rel="stylesheet"
     />
 
-    <!-- Fonte Lora (da sua versão) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -16,7 +15,11 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="home.css" />
+    <link rel="stylesheet" href="css/home.css" />
+    <!--Mapa-->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
     <title>Uniclass</title>
   </head>
 
@@ -60,7 +63,7 @@
           <label>Calendário</label>
 
           <li>
-            <a href="#"
+            <a href="../maps/unipe_mapa.html"
               ><span class="material-symbols-outlined">map_search</span></a
             >
           </li>
@@ -72,6 +75,13 @@
             >
           </li>
           <label>Comunidade e Eventos</label>
+
+          <li>
+            <a href="#"
+              ><span class="material-symbols-outlined">logout</span></a
+            >
+          </li>
+          <label for="">Sair</label>
         </ul>
       </nav>
     </header>
@@ -82,16 +92,23 @@
       <!-- Carrossel vindo da outra branch -->
       <div class="carrosel">
         <div class="slides">
-          <img src="img/Mochilao.png" alt="uipê_Mochilão" />
-          <img src="img/mqdefault.jpg" alt="Tour_Virtual" />
-          <img src="img/hq720.jpg" alt="fábrica_software" />
+          <img src="docs/img/Mochilao.png" alt="uipê_Mochilão" />
+          <img src="docs/img/mqdefault.jpg" alt="Tour_Virtual" />
+          <img src="docs/img/hq720.jpg" alt="fábrica_software" />
         </div>
 
         <button class="esquerda">&#10094;</button>
         <button class="direita">&#10095;</button>
       </div>
+
+      <section id="map" class="map-container">
+        <button id="open-maps-btn">
+          <a href="../maps/unipe_mapa.html">⤢</a>
+        </button>
+      </section>
     </main>
 
     <script src="home.js"></script>
+    <script src="../maps/mapa.js"></script>
   </body>
 </html>
