@@ -8,6 +8,9 @@ export interface Local {
     coordenadas: GeoPoint;
     mapaXY: Map<string, number>;
     acessivel: boolean;
+
+    createdAt?: Date; 
+    updatedAt?: Date;
 }
 
 export interface Instituicao {
