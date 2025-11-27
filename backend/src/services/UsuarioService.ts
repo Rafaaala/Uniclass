@@ -39,7 +39,7 @@ class UsuarioService {
             throw new CustomError(`Instituição com ID ${instituicaoId} não encontrada.`, 404);
         }
 
-        const finalData = { ...data, instituicaoId };
+        const finalData = { ...data, instituicaoId };   
 
         const novoUsuario = await UsuarioRepository.createUsuario(finalData);
 
@@ -64,7 +64,7 @@ class UsuarioService {
         }
 
         const usuarios = await UsuarioRepository.getAllUsuariosByInstituicao(instituicaoId);
-
+        usuarios.forEach(u => console.log('ID do Usuário no Service:', u.usuarioId));
         if (usuarios.length === 0) {
             throw new CustomError("Nenhum usuário cadastrado para esta instituição.", 404);
         }

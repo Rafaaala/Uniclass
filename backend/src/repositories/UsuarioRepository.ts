@@ -12,8 +12,11 @@ class UsuarioRepository {
     async createUsuario(data: UsuarioCreateInput): Promise<Usuario> {
         const timestamp = FieldValue.serverTimestamp();
 
+        // Novo passo: Remova qualquer ID que possa vir do input
+        const { usuarioId, ...dadosLimpos } = data as any; 
+
         const dadosParaPersistencia = {
-            ...data,
+            ...dadosLimpos,
             createdAt: timestamp,
             updatedAt: timestamp,
         };
