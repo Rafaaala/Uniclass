@@ -1,0 +1,17 @@
+body { 
+    margin: 0; 
+    padding: 0; 
+}
+
+#map { 
+    height: 100vh; 
+    width: 100%; 
+}
+
+/* Estilo para as ruas do campus (GeoJSON) */
+.minha-rua-campus {
+    stroke: #555;
+    stroke-width: 4;
+    stroke-dasharray: 4; /* Efeito pontilhado opcional */
+}
+
