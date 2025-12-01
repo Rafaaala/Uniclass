@@ -1,0 +1,27 @@
+server:
+  type: default
+  applicationConnectors:
+    - type: http
+      port: 8989
+  adminConnectors:
+    - type: http
+      port: 8990
+
+graphhopper:
+  # O GraphHopper só lerá este arquivo de dados (seu GeoJSON)
+  datareader.file: caminhos_unipe.geojson
+
+  # ONDE O ERRO ESTÁ: Force a usar apenas o perfil "foot" e,
+  # MUITO IMPORTANTE, adicione a linha de import.osm.nogeo para ignorar a tag de acesso de estrada.
+  graph.encoded_values: foot:access
+  import.osm.nogeo: false # Deve ser 'false' para carregar GeoJSON
+
+  # Defina o perfil de codificação aqui.
+  # Use 'foot' se o GeoJSON tiver tags como 'highway=footway'.
+  # Se o GeoJSON for muito simples, 'car' às vezes funciona como um veículo genérico.
+  # Vamos manter 'foot' e tentar resolver as dependências de tags.
+  profiles:
+    - name: foot
+      vehicle: foot
+      weighting: custom
+      custom_model_file: custom_model.yml
