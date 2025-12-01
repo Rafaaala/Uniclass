@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mapa UNIPÊ — Navegação Pedestre</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet"/>
+
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="overlay" onclick="toggleMenu()"></div>
+
+<nav id="menuLateral" class="fechado">
+    <ul id="navbar-links">
+        <li>
+            <a href="#" onclick="toggleMenu()">
+                <span class="material-symbols-outlined">person_edit</span>
+            </a>
+            <label onclick="toggleMenu()">Perfil</label>
+        </li>
+
+        <li>
+            <a href="../home/home.html" onclick="toggleMenu()">
+                <span class="material-symbols-outlined">home</span>
+            </a>
+            <label onclick="toggleMenu()">Home</label>
+        </li>
+
+        <li>
+            <a href="#" onclick="toggleMenu()">
+                <span class="material-symbols-outlined">lightbulb</span>
+            </a>
+            <label onclick="toggleMenu()">Sugestão</label>
+        </li>
+        
+        <li>
+            <a href="../calendario/index.html" onclick="toggleMenu()">
+                <span class="material-symbols-outlined">calendar_month</span>
+            </a>
+            <label onclick="toggleMenu()">Calendário</label>
+        </li>
+        
+        <li>
+            <a href="#" onclick="toggleMenu()">
+                <span class="material-symbols-outlined">map_search</span>
+            </a>
+            <label onclick="toggleMenu()">Maps</label>
+        </li>
+        
+        <li>
+            <a href="#" onclick="toggleMenu()">
+                <span class="material-symbols-outlined">maps_ugc</span>
+            </a>
+            <label onclick="toggleMenu()">Comunidade e Eventos</label>
+        </li>
+    </ul>
+</nav>
+
+<header id="map-header">
+    <button id="navbar-toggle" onclick="toggleMenu()">
+        <span class="material-symbols-outlined">menu</span>
+    </button>
+    <h1 id="map-title">Uniclass</h1>
+</header>
+
+
+<div id="aviso-fora">Você está fora do campus — navegação disponível somente dentro da área.</div>
+<div id="map"></div>
+<div id="info-bottom">Clique em qualquer bloco e pressione <strong>IR</strong> para iniciar navegação.</div>
+<button id="btn-sair-navegacao" onclick="sairDaNavegacao()">🚪 Sair da Navegação</button>
+<button id="btn-toggle-voz" onclick="toggleVoz()" title="Ativar/Desativar voz">🔊</button>
+
+<button id="btn-voice-cmd" title="Comandos de voz">🎤</button>
+
+<button id="btn-auto-reload" title="Auto-recarregar rota">Auto-reload</button>
+
+<button id="btn-proxima" onclick="anunciarProximaInstrucao()">Próxima</button>
+<button id="btn-anterior" onclick="anunciarInstrucaoAnterior()">Anterior</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+
+<script src="mapa.js"></script>
+
+</body>
+</html>
