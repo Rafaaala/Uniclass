@@ -169,7 +169,7 @@ function calculaBearing(lat1, lon1, lat2, lon2) {
 
     var y = Math.sin(Δλ) * Math.cos(φ2);
     var x = Math.cos(φ1)*Math.sin(φ2) -
-             Math.sin(φ1)*Math.cos(φ2)*Math.cos(Δλ);
+            Math.sin(φ1)*Math.cos(φ2)*Math.cos(Δλ);
     var θ = Math.atan2(y, x);
     var bearing = (θ * 180 / Math.PI + 360) % 360;
     return bearing;

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa do Campus - Navegação</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <link rel="stylesheet" href="./css/style-map.css">
+</head>
+<body>
+    
+    <div id="map"></div>
+
+    <nav id="menuLateral">
+        <ul>
+            <li>
+                <a href="#"><span class="material-symbols-outlined">person_edit</span></a>
+            </li>
+            <label>Perfil</label>
+
+            <li>
+                <a href="../home/home.html"><span class="material-symbols-outlined"> home</span></a>
+            </li>
+            <label>Home</label>
+
+            <li>
+                <a href="../home/home.html"><span class="material-symbols-outlined">lightbulb</span></a>
+            </li>
+            <label>Sugestão</label>
+
+            <li>
+                <a href="../calendario/index.html"><span class="material-symbols-outlined">calendar_month</span></a>
+            </li>
+            <label>Calendário</label>
+
+            <li>
+                <a href="../mapa_personalizado/mapa.html"><span class="material-symbols-outlined">map_search</span></a>
+            </li>
+            <label>Maps</label>
+
+            <li>
+                <a href="#"><span class="material-symbols-outlined">maps_ugc</span></a>
+            </li>
+            <label>Comunidade e Eventos</label>
+        </ul>
+    </nav>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script src="./scripts/inicializacao-mapa.js"></script>
+    <script src="./scripts/navegacao.js"></script>
+
+</body>
+</html>
