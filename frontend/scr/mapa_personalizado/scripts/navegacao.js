@@ -2,7 +2,7 @@
 var userMarker = null;      // Marcador do usuário
 var posicaoUsuario = null;  // {lat, lng} atual
 var posicaoDestino = null;  // {lat, lng} do destino
-var ultimaPosicaoCalc = null; // Para evitar recalcular a cada passo mínimo
+var ultimaPosicaoCalc = null;
 
 // --- CONFIGURAÇÕES VISUAIS (GEOJSON) --- 
 var caminhosCampus = {
@@ -37,27 +37,21 @@ function calcularRota(pontoA, pontoB) {
                 return;
             }
 
-            // Redesenha o marcador de destino
-            if (pontoB) {
-                L.marker(pontoB).addTo(camadaRota).bindPopup("Destino");
-            }
-
-            // Pega o caminho dos pontos da resposta
             var caminho = data.paths[0].points.coordinates;
-            
-            // Inverte [lng, lat] para [lat, lng] que o Leaflet usa
             var latlngs = caminho.map(coord => [coord[1], coord[0]]);
 
-            // Desenha a linha azul da rota
+            // Desenha a rota
             L.polyline(latlngs, {color: 'blue', weight: 4}).addTo(camadaRota);
+
+            // Adiciona marcador final fixo na rota
+            L.marker(pontoB).addTo(camadaRota);
             
-            // Log de distância
-            var distancia = data.paths[0].distance;
-            console.log(`Distância: ${distancia} metros`);
+            console.log(`Distância: ${Math.round(data.paths[0].distance)} metros`);
         })
         .catch(err => console.error("Erro ao conectar com GraphHopper:", err));
 }
 
+// --- MONITORAMENTO GPS ---
 if (navigator.geolocation) {
     navigator.geolocation.watchPosition(
         function(pos){
@@ -75,16 +69,15 @@ if (navigator.geolocation) {
 
             // Se já existe um destino, atualiza a rota automaticamente
             if (posicaoDestino) {
-                // Calcula distância percorrida desde o último cálculo para não spammar a API
+                // Calcula distância desde o último cálculo
                 var dist = 0;
                 if (ultimaPosicaoCalc) {
                     dist = posicaoUsuario.distanceTo(ultimaPosicaoCalc);
                 }
-
-                // Só recalcula se andou mais de 5 metros
+                // Só recalcula se andou mais de 5 metros ou se é a primeira vez
                 if (!ultimaPosicaoCalc || dist > 5) {
                     calcularRota(posicaoUsuario, posicaoDestino);
-                    ultimaPosicaoCalc = posicaoUsuario;
+                    ultimaPosicaoCalc = posicaoUsuario; // Atualiza a referência
                 }
             }
         },
@@ -100,15 +93,19 @@ else {
 
 // --- INTERAÇÃO COM USUÁRIO ---
 map.on('click', function(e) {
-    pontos.push(e.latlng);
 
-    // Adiciona marcador onde clicou
-    L.marker(e.latlng).addTo(camadaRota);
-
-    if (pontos.length === 2) {
-        // Se já temos 2 pontos, traça a rota e reseta o array
-        calcularRota(pontos[0], pontos[1]);
-        pontos = []; 
+    if (!posicaoUsuario) {
+        alert("Aguardando sinal de GPS... Por favor, espere um momento.");
+        return;
     }
+
+    posicaoDestino = e.latlng;
+    
+    L.popup()
+        .setLatLng(posicaoDestino)
+        .setContent("Destino selecionado")
+        .openOn(map);
+
+    calcularRota(posicaoUsuario, posicaoDestino);
 });
 
