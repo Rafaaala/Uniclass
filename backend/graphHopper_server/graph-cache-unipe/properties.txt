@@ -1,4 +1,4 @@
-datareader.import.date=2025-12-01T05:28:31Z
+datareader.import.date=2025-12-08T15:34:34Z
 profiles=foot|-751430327
 graph.em.version=4
 graph.em.bytes_for_flags=5

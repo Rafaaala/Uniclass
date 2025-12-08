@@ -1,0 +1,71 @@
+.map-preview {
+    flex: 1; 
+    width: 90%;    
+    flex-direction: column;      /* Ocupa 90% da largura da tela (deixa borda lateral) */
+    max-width: 800px;    /* Trava uma largura máxima para não ficar gigante em PC */
+    margin: 10px auto;   /* 'auto' nas laterais faz a centralização horizontal */
+    display: flex;
+    box-sizing: border-box;
+}
+
+/* Título acima do mapa (opcional, para alinhar com o mapa) */
+.map-preview h3 {
+    text-align: center; /* Centraliza o texto do título */
+    margin-bottom: 10px;
+    font-family: 'Lora', serif;
+    color: #333;
+}
+
+/* Moldura do Iframe */
+.map-frame-container {
+    position: relative;
+    flex: 1; /* Ocupa toda a altura disponível dentro do preview */
+    width: 100%;
+    /* Estética: Bordas arredondadas e sombra para destacar do fundo */
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2); /* Sombra mais forte para destaque */
+    border: 2px solid #fff; /* Borda branca fina para acabamento */
+    overflow: hidden;
+    background-color: #e0e0e0; /* Cor de fundo enquanto carrega */
+}
+
+
+
+/* O iframe em si */
+.map-frame-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    pointer-events: auto; /* Permite interagir */
+}
+
+.btn-expandir {
+    position: absolute;
+    top: 10px;   /* Distância do topo */
+    right: 10px; /* Distância da direita */
+    z-index: 10; /* Garante que fique acima do mapa */
+    
+    background-color: white;
+    color: #333;
+    
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* Deixa redondinho */
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3); /* Sombra para destacar do mapa */
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.btn-expandir:hover {
+    background-color: #f0f0f0;
+    transform: scale(1.1); /* Aumenta levemente */
+}
+
+.btn-expandir .material-symbols-outlined {
+    font-size: 24px;
+}
