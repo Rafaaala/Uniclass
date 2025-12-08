@@ -24,7 +24,8 @@ var iconGPS = L.divIcon({
 // --- CHAMADA DA API JAVA ---
 function calcularRota(pontoA, pontoB) {
     // URL da API local do GraphHopper
-    var url = `http://localhost:8989/route?point=${pontoA.lat},${pontoA.lng}&point=${pontoB.lat},${pontoB.lng}&profile=foot&points_encoded=false`;
+    const baseUrl = "/graphhopper/api"
+    var url = `${baseUrl}?point=${pontoA.lat},${pontoA.lng}&point=${pontoB.lat},${pontoB.lng}&profile=foot&points_encoded=false`;
 
     fetch(url)
         .then(response => response.json())
@@ -39,6 +40,7 @@ function calcularRota(pontoA, pontoB) {
 
             var caminho = data.paths[0].points.coordinates;
             var latlngs = caminho.map(coord => [coord[1], coord[0]]);
+            var distanciaMetros = data.paths[0].distance;
 
             // Desenha a rota
             L.polyline(latlngs, {color: 'blue', weight: 4}).addTo(camadaRota);
@@ -46,9 +48,44 @@ function calcularRota(pontoA, pontoB) {
             // Adiciona marcador final fixo na rota
             L.marker(pontoB).addTo(camadaRota);
             
-            console.log(`Distância: ${Math.round(data.paths[0].distance)} metros`);
+            painelDinamico(distanciaMetros);
+            console.log(`Distância: ${Math.round(distanciaMetros)} metros`);
         })
         .catch(err => console.error("Erro ao conectar com GraphHopper:", err));
+}
+
+function painelDinamico(metros) {
+    var painelDistancia = document.getElementById('painel-distancia');
+    var textoDistancia = document.getElementById('distancia-texto');
+    var painelChegada = document.getElementById('painel-chegada');
+
+    // Torna o painel visivel no css
+    painelDistancia.style.display = 'block';
+
+    // Verificação de chegada
+    if (metros < 15) {
+        painelDistancia.style.display = 'none';
+        painelChegada.style.display = 'block';
+    }
+    else {
+        if (metros > 15 && metros < 1000) {
+            // Converte para Km se for longe
+            textoDistancia.innerText = Math.round(metros) + " m";
+        }
+        else {
+            texto.innerText = (metros / 1000).toFixed(1) + " km";
+        }
+    }
+}
+
+function encerrarNavegacao() {
+    camadaRota.clearLayers();
+    document.getElementById('painel-chegada').style.display = 'none';
+    document.getElementById('painel-distancia').style.display = 'none';
+
+    // Reseta variaveis de controle
+    posicaoDestino = null;
+    ultimaPosicaoCalc = null;
 }
 
 // --- MONITORAMENTO GPS ---
@@ -93,19 +130,53 @@ else {
 
 // --- INTERAÇÃO COM USUÁRIO ---
 map.on('click', function(e) {
-
+    // Verifica a posição do usuário dentro do CAMPUS
     if (!posicaoUsuario) {
         alert("Aguardando sinal de GPS... Por favor, espere um momento.");
         return;
     }
 
+    // Recebe o destino do usuário por meio do click
     posicaoDestino = e.latlng;
     
+    // Confirmação de destino
+    var conteudoPopup = `
+        <div style="text-align: center;">
+            <p style="margin: 5px 0;">Navegar até aqui?</p>
+            <button class="btn-ir" onclick="confirmarNavegacao()">IR</button>
+        </div>
+        <style>
+            .btn-ir {
+                background-color: #3553C1; /* Verde */
+                border: none;
+                color: white;
+                padding: 8px 20px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 14px;
+                margin: 4px 2px;
+                cursor: pointer;
+                border-radius: 4px;
+                font-weight: bold;
+            }
+        </style>
+        
+        `;
+
     L.popup()
         .setLatLng(posicaoDestino)
-        .setContent("Destino selecionado")
+        .setContent(conteudoPopup)
         .openOn(map);
 
-    calcularRota(posicaoUsuario, posicaoDestino);
-});
+    // Window para o html do popup
+    window.confirmarNavegacao = function() {
+        // Fecha o popup
+        map.closePopup();
 
+        // Adiciona um marcador no destino
+        L.marker(posicaoDestino).addTo(camadaRota);
+
+        calcularRota(posicaoUsuario, posicaoDestino);
+    }
+});

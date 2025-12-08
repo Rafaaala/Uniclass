@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="./css/reclama.css" />
+
+    <title>Uniclass</title>
+  </head>
+
+  <body>
+    <header>
+      <div>
+        <h1>Uniclass</h1>
+        <button id="btnMenu">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+      </div>
+
+      <nav id="menuLateral">
+        <ul>
+          <li>
+            <a href="#"
+              ><span class="material-symbols-outlined">person_edit</span></a
+            >
+          </li>
+          <label>Perfil</label>
+
+          <li>
+            <a href="../home/home.html"
+              ><span class="material-symbols-outlined"> home</span></a
+            >
+          </li>
+          <label>Home</label>
+
+          <li>
+            <a href="./reclameAqui.html"
+              ><span class="material-symbols-outlined">lightbulb</span></a
+            >
+          </li>
+          <label>Reclame aqui</label>
+
+          <li>
+            <a href="../calendario/index.html"
+              ><span class="material-symbols-outlined">calendar_month</span></a
+            >
+          </li>
+          <label>Calendário</label>
+
+          <li>
+            <a href="../mapa_personalizado/mapa.html"
+              ><span class="material-symbols-outlined">map_search</span></a
+            >
+          </li>
+          <label>Maps</label>
+
+          <li>
+            <a href="#"
+              ><span class="material-symbols-outlined">maps_ugc</span></a
+            >
+          </li>
+          <label>Comunidade e Eventos</label>
+
+          <li>
+            <a href="#"
+              ><span class="material-symbols-outlined">logout</span></a
+            >
+          </li>
+          <label for="">Sair</label>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="overlay"></div>
+    
+    <div class="container">
+        <h1>🗣️ Reclame aqui</h1>
+        <p>Utilize o formulário abaixo para registrar sua reclamação ou sugestão. Sua voz é importante para nós.</p>
+
+        <form id="form-reclamacao">
+            
+            <div class="form-group">
+                <label class="label" for="assunto">Assunto da Reclamação</label>
+                <input type="text" id="assunto" name="assunto" required placeholder="Ex: Atraso, falta de material, etc.">
+            </div>
+
+            <div class="form-group">
+                <label class="label" for="categoria">Categoria (Grau de Importância do Filtro)</label>
+                <select id="categoria" name="categoria" required>
+                  <div class="opicao">
+                    <option value="" disabled selected>Selecione a Área de Responsabilidade</option>
+                    <option value="Professor">Reclamação sobre Professor(a)</option>
+                    <option value="Instituicao">Reclamação sobre a Instituição (Administração, Infraestrutura, etc.)</option>
+                  </div>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="label" for="descricao">Detalhes da Reclamação</label>
+                <textarea id="descricao" name="descricao" rows="5" required placeholder="Descreva seu problema com o máximo de detalhes possível, mantendo o respeito."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="label" for="nome">Seu Nome (Opcional)</label>
+                <input type="text" id="nome" name="nome" placeholder="Preencha apenas se não for anônimo(a).">
+            </div>
+
+            <button type="submit" class="submit-btn">Enviar</button>
+        </form>
+
+        
+    </div>
+
+    <script src="reclama.js"></script>
+  </body>
+</html>

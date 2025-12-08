@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa do Campus - Navegação</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <link rel="stylesheet" href="./css/style-map.css">
+</head>
+<body>
+    
+    <div id="painel-distancia">
+        Restam: <span id="distancia-texto"></span>
+    </div>
+    <div id="painel-chegada" style="display: none;">
+        <div>
+            <span style="font-size: 24px;"></span><br>
+            <strong>Você chegou!</strong>
+        </div>
+        <button id="painel-chegada-button" onclick="encerrarNavegacao()" style="margin-top:10px; padding:5px 10px; cursor:pointer;">
+            Encerrar navegação
+        </button>
+    </div>
+
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script src="./scripts/inicializacao-mapa.js"></script>
+    <script src="./scripts/navegacao.js"></script>
+
+</body>
+</html>

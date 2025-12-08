@@ -32,3 +32,4 @@ L.tileLayer('tiles/png/{z}/{x}/{y}.png', {
 
 // --- LÓGICA DE ROTEAMENTO (GraphHopper) ---
 var camadaRota = L.layerGroup().addTo(map);
+var pontos = [];
