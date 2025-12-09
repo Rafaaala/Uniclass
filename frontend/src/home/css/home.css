@@ -91,7 +91,7 @@ label {
 /* quando abrir */
 #menuLateral.aberto {
   transform: translateX(0);
-  z-index: 20;
+  z-index: 999;
 }
 
 /* overlay fundo preto */
