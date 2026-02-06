@@ -58,8 +58,27 @@ POP UP DE NAVEGAÇÃO
 }
 
 /* ===============================
-POPUP COMÉRCIO
+POPUP
    =============================== */
+
+.popup {
+    text-align: center;
+    width: 230px;
+    font-family: Arial, sans-serif;
+}
+.popup h3 {
+    margin: 6px 0 8px;
+    color: #3553C1;
+    font-size: 16px;
+}
+.popup img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    margin-bottom: 6px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+}
 
 .label-bloco {
     color: white;
@@ -68,10 +87,10 @@ POPUP COMÉRCIO
     font-family: Arial, Helvetica, sans-serif;
     font-size: 16px;
     .icon {
-  transform: rotate(120deg);
+        transform: rotate(120deg);
+    }
 }
 
-}
 /* CONTAINER DO CARDÁPIO */
 
 
@@ -151,58 +170,6 @@ POPUP COMÉRCIO
 .item-card span,
 .item-card p {
     word-break: break-word;
-}
-
-
-/* POP UP ICONS */
-
-.popup-comercio,
-.popup-reitoria,
-.popup-eva,
-.popup-estacionamento,
-.popup-turismo,
-.popup-biblioteca,
-.popup-museu,
-.popup-auditorio,
-.popup-ginasio {
-    width: 230px;
-    font-family: Arial, sans-serif;
-    background-color: #fff;
-    border-radius: 14px;
-    padding: 10px;
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
-}
-
-.popup-comercio h3,
-.popup-reitoria h3,
-.popup-eva h3,
-.popup-estacionamento h3,
-.popup-turismo h3,
-.popup-biblioteca h3,
-.popup-museu h3,
-.popup-auditorio h3,
-.popup-ginasio h3 {
-    margin: 8px 0 10px;
-    color: #3553C1;
-    font-size: 16px;
-    font-weight: 700;
-    text-align: center;
-}
-
-.popup-comercio img,
-.popup-reitoria img,
-.popup-eva img,
-.popup-estacionamento img,
-.popup-turismo img,
-.popup-biblioteca img,
-.popup-museu img,
-.popup-auditorio img,
-.popup-ginasio img {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 10px;
-    margin-bottom: 10px;
 }
 
 
@@ -454,4 +421,3 @@ POPUP COMÉRCIO
     color: white;
     border-color: #3553C1;
 }
- 
