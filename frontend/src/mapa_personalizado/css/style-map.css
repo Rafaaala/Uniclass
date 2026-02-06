@@ -98,6 +98,9 @@ POPUP
     width: 280px; 
     max-width: 100%;
     box-sizing: border-box;
+    position: relative;
+    z-index: 9999;
+    pointer-events: auto;
 }
 
 
@@ -244,6 +247,7 @@ POPUP
 .leaflet-popup-content-wrapper {
     border-radius: 18px;
     padding: 10px;
+    pointer-events: auto !important;
 }
 
 .leaflet-popup-close-button {

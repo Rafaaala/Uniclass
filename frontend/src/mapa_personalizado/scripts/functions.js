@@ -73,20 +73,22 @@ function togglePopupContent(nomeLoja, destino) {
         const popup = map._popup;
 
         if (popup) {
-            const oldAutoPan = popup.options.autoPan;
-            popup.options.autoPan = false;
-
             popup.setContent(novoConteudo);
             popup.update();
 
-            // ⬇️ ESSENCIAL: reaplicar após trocar conteúdo
+            // REAPLICA A BLINDAGEM IMEDIATAMENTE APÓS A TROCA
             setTimeout(() => {
-                if (popup._container) {
-                    L.DomEvent.disableClickPropagation(popup._container);
-                    L.DomEvent.disableScrollPropagation(popup._container);
+                const container = popup._container;
+                if (container) {
+                    L.DomEvent.disableClickPropagation(container);
+                    L.DomEvent.disableScrollPropagation(container);
+                    
+                    // Impede que qualquer clique dentro do balão feche o mapa
+                    container.onclick = function(e) {
+                        L.DomEvent.stopPropagation(e);
+                    };
                 }
-                popup.options.autoPan = oldAutoPan;
-            }, 0);
+            }, 10);
         }
     }
 }
@@ -150,8 +152,8 @@ labelMarker = L.marker(latLng, {
 });
 
 labelMarker.bindPopup(popupContent, {
-    maxWidth: 250,
-    minWidth: 250,
+    maxWidth: 300,
+    minWidth: 300,
     closeOnClick: false,
     autoPan: true
 });
@@ -161,19 +163,21 @@ markers.addLayer(labelMarker);
 // 🔒 BLINDAGEM TOTAL DO POPUP
 labelMarker.on('popupopen', function (e) {
     const container = e.popup._container;
+    if (container) {
+        // Bloqueia o clique de chegar no mapa
+        L.DomEvent.disableClickPropagation(container);
+        
+        // Bloqueia o scroll de arrastar o mapa ao navegar no cardápio
+        L.DomEvent.disableScrollPropagation(container);
 
-    if (!container) return;
-
-    // Impede clique vazar pro mapa
-    L.DomEvent.disableClickPropagation(container);
-
-    // Impede scroll arrastar o mapa
-    L.DomEvent.disableScrollPropagation(container);
-
-    // Opcional: garante que cliques internos não fechem nada
-    container.addEventListener('click', function (ev) {
-        ev.stopPropagation();
-    });
+        // Força o fechamento manual apenas no X (opcional)
+        container.addEventListener('click', function(ev) {
+            // Se o clique foi dentro do container, não deixa o Leaflet fechar
+            if (ev.target.tagName !== 'A' || !ev.target.classList.contains('leaflet-popup-close-button')) {
+                ev.stopPropagation();
+            }
+        });
+    }
 });
 
 }
@@ -564,17 +568,19 @@ function renderMarkers(features) {
         const tipo = props.tipo ? props.tipo.toLowerCase() : '';
         const nome = props.nome ? props.nome.toLowerCase() : '';
 
-
         const config = markerConfig[nome] || markerConfig[tipo];
 
         let labelMarker;
 
         if(config) {
+            // Busca os dados extras (incluindo o cardapioHTML)
             const dadosExtras = (config.dataSource && config.dataSource[props.nome]) ? config.dataSource[props.nome] : {};
             
             const imageFinal = dadosExtras.img || "documents/imgs/no-image.jpg";
             const descFinal = dadosExtras.desc || "Sem descrição disponível.";
+            const cardapioFinal = dadosExtras.cardapioHTML || "<p>Cardápio indisponível.</p>";
 
+            // Conteúdo da "Home" do Popup
             const popupContent = `
                 <div class="popup">
                     <h3>${props.nome}</h3>
@@ -582,6 +588,15 @@ function renderMarkers(features) {
                     <p>${descFinal}</p>
                 </div>
             `;
+
+            // SALVA OS TEMPLATES: Sem isso, o botão de cardápio não funciona
+            if (tipo === "comercio") {
+                window.popupTemplates = window.popupTemplates || {};
+                window.popupTemplates[props.nome] = {
+                    home: popupContent,
+                    menu: cardapioFinal
+                };
+            }
 
             labelMarker = L.marker(latLng, {
                 icon: L.icon({
@@ -593,7 +608,23 @@ function renderMarkers(features) {
                 interactive: true
             });
 
-            labelMarker.bindPopup(popupContent);
+            // CONFIGURAÇÃO DO POPUP: Largura fixa e não fecha ao clicar no mapa
+            labelMarker.bindPopup(popupContent, {
+                maxWidth: 250,
+                minWidth: 250,
+                closeOnClick: true,
+                autoPan: true
+            });
+
+            // BLINDAGEM: Impede que o clique no popup chegue ao mapa
+            labelMarker.on('popupopen', function (e) {
+                const container = e.popup._container;
+                if (container) {
+                    L.DomEvent.disableClickPropagation(container);
+                    L.DomEvent.disableScrollPropagation(container);
+                }
+            });
+
             markers.addLayer(labelMarker);
         }
         else {
@@ -616,9 +647,10 @@ function renderMarkers(features) {
                 labelsLayer[andar].addLayer(labelMarker);
             }
         }
-
-        if (!map.hasLayer(markers)) {
-            markers.addTo(map);
-        }
     });
+
+    // Adiciona o grupo de markers ao mapa se não estiver presente
+    if (!map.hasLayer(markers)) {
+        markers.addTo(map);
+    }
 }
