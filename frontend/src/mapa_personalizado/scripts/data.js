@@ -1,6 +1,6 @@
 const detalhesComercios = {
-    "Cantina CT": {
-        img: "documents/imgs/cantina-ct.jpg",
+    "Big Hot Lanchonetes": {
+        img: "documents/imgs/cantina-ct.png",
         desc: `
             <ul class="popup-lista">
                 <li><i class="bi bi-cup-hot"></i> Salgados variados</li>
@@ -213,8 +213,8 @@ const detalhesComercios = {
         `
     },
 
-    "Pizzaria": {
-        img: "documents/imgs/pizzaria-icon.jpg",
+    "Forno Di Campi": {
+        img: "documents/imgs/pizzaria-icon.png",
         desc: `
             <ul class="popup-lista">
                 <li><i class="bi bi-pizza"></i> Pizzas artesanais</li>
